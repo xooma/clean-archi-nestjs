@@ -1,41 +1,47 @@
-import { IIDGenerator, IWebinaireRepository, OrganizeWebinaire, Webinaire } from './organize-webinaire';
+import { OrganizeWebinaire } from './organize-webinaire';
+import { FixedIDGenerator, InMemoryWebinaireRepository } from '../adapters';
 
 describe('Feature: organizing a webinaire', () => {
-  it('should create a webinaire', async () => {
-    class WebinaireRepository implements IWebinaireRepository {
-      public database: Webinaire[] = [];
+  let repository: InMemoryWebinaireRepository;
+  let idGenerator: FixedIDGenerator;
+  let useCase: OrganizeWebinaire
 
-      async create(webinaire: Webinaire): Promise<void> {
-        this.database.push(webinaire);
-      }
-    }
+  beforeEach(() => {
+    repository = new InMemoryWebinaireRepository();
+    idGenerator = new FixedIDGenerator();
+    useCase = new OrganizeWebinaire(repository, idGenerator);
+  });
 
-    class FixedIDGenerator implements IIDGenerator {
-      generate() {
-        return 'id-1';
-      }
-    }
+  describe('Scenario: Happy path', () => {
+    it('should return the id', async () => {
+      const result = await useCase.execute({
+        title: 'My first webinaire',
+        seats: 100,
+        startDate: new Date('2024-01-10T10:00:00Z'),
+        endDate: new Date('2024-01-10T11:00:00Z'),
+      });
 
-    const repository = new WebinaireRepository();
-    const idGenerator = new FixedIDGenerator();
-
-    const useCase = new OrganizeWebinaire(repository, idGenerator);
-    const result = await useCase.execute({
-      title: 'My first webinaire',
-      seats: 100,
-      startDate: new Date('2024-01-01T10:00:00Z'),
-      endDate: new Date('2024-01-01T11:00:00Z'),
+      expect(result.id).toEqual('id-1');
     });
 
-    expect(repository.database.length).toBe(1);
+    it('should insert the webinaire to the database', async () => {
+      await useCase.execute({
+        title: 'My first webinaire',
+        seats: 100,
+        startDate: new Date('2024-01-10T10:00:00Z'),
+        endDate: new Date('2024-01-10T11:00:00Z'),
+      });
+      
+      expect(repository.database.length).toBe(1);
 
-    const createdWebinaire = repository.database[0];
-
-    expect(createdWebinaire.props.id).toEqual('id-1');
-    expect(createdWebinaire.props.title).toBe('My first webinaire');
-    expect(createdWebinaire.props.seats).toBe(100);
-    expect(createdWebinaire.props.startDate).toEqual(new Date('2024-01-01T10:00:00Z'));
-    expect(createdWebinaire.props.endDate).toEqual(new Date('2024-01-01T11:00:00Z'));
-    expect(result.id).toEqual('id-1');
+      const createdWebinaire = repository.database[0];
+      expect(createdWebinaire.props).toEqual({
+        id: 'id-1',
+        title: 'My first webinaire',
+        seats: 100,
+        startDate: new Date('2024-01-10T10:00:00Z'),
+        endDate: new Date('2024-01-10T11:00:00Z'),
+      });
+    });
   });
 });
