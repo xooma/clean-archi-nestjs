@@ -14,7 +14,7 @@ describe('Feature: organizing a webinaire', () => {
     });
   }
 
-  const johnDoe = new User({ id: 'john-doe' });
+  const johnDoe = new User({ id: 'john-doe', email: 'johndoe@gmail.com', password: 'azerty' });
   let repository: InMemoryWebinaireRepository;
   let idGenerator: FixedIDGenerator;
   let dateGenerator: FixedDateGenerator;
@@ -39,7 +39,7 @@ describe('Feature: organizing a webinaire', () => {
     it('should return the id', async () => {
       const result = await useCase.execute(payload);
 
-      expect(result).toEqual('id-1');
+      expect(result).toEqual({ id: 'id-1' });
     });
 
     it('should insert the webinaire to the database', async () => {
@@ -62,7 +62,7 @@ describe('Feature: organizing a webinaire', () => {
     };
 
     it('should throw an error', async () => {
-      await expect(() => useCase.execute(payload)).rejects.toThrowError(
+      await expect(() => useCase.execute(payload)).rejects.toThrow(
         'The webinaire must have a maximum of 1000 seats',
       );
     });
@@ -86,7 +86,7 @@ describe('Feature: organizing a webinaire', () => {
     };
 
     it('should throw an error', async () => {
-      await expect(() => useCase.execute(payload)).rejects.toThrowError(
+      await expect(() => useCase.execute(payload)).rejects.toThrow(
         'The webinaire must have a maximum of 1000 seats',
       );
     });
@@ -110,7 +110,7 @@ describe('Feature: organizing a webinaire', () => {
     };
 
     it('should throw an error', async () => {
-      await expect(() => useCase.execute(payload)).rejects.toThrowError(
+      await expect(() => useCase.execute(payload)).rejects.toThrow(
         'The webinaire must have at least 1 seat',
       );
     });
