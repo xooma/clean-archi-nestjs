@@ -1,7 +1,8 @@
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
-import { AppModule } from '../app/app.module';
 import { addDays } from 'date-fns';
+
+import { AppModule } from '../app/app.module';
 
 describe('Feature: organizing a webinaire', () => {
   it('should organize a webinaire', async () => {

@@ -1,30 +1,31 @@
-import { Body, Controller, Get, Post, Res } from '@nestjs/common';
-import { addDays } from 'date-fns';
+import { Body, Controller, Post } from '@nestjs/common';
+import { z } from 'zod';
 
-import { AppService } from './app.service';
-import { OrganizeWebinaire } from '../usecases/organize-webinaire';
+import { OrganizeWebinaire } from '../usecases';
 import { User } from '../entities';
+import { ZodValidationPipe } from '../pipes';
+
+const schema = z.object({
+  title: z.string(),
+  seats: z.number(),
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date(),
+});
 
 @Controller()
 export class AppController {
-  constructor(
-    private readonly appService: AppService,
-    private organizeWebinaire: OrganizeWebinaire,
-  ) {}
-
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
+  constructor(private organizeWebinaire: OrganizeWebinaire) {}
 
   @Post('/webinaires')
-  async handleOrganizeWebinaire(@Body() body: any): Promise<{ id: string }> {
+  async handleOrganizeWebinaire(
+    @Body(new ZodValidationPipe(schema)) body: z.infer<typeof schema>,
+  ): Promise<{ id: string }> {
     return this.organizeWebinaire.execute({
       user: new User({ id: 'john-doe' }),
       title: body.title,
       seats: body.seats,
-      startDate: new Date(body.startDate),
-      endDate: new Date(body.endDate),
+      startDate: body.startDate,
+      endDate: body.endDate,
     });
   }
 }

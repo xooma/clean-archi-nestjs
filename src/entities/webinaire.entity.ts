@@ -23,6 +23,6 @@ export class Webinaire {
   }
 
   hasNoSeats() {
-    return this.props.seats >= 1
+    return this.props.seats < 1
   }
 }

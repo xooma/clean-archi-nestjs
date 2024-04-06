@@ -33,7 +33,7 @@ export class OrganizeWebinaire {
       throw new Error('The webinaire must have a maximum of 1000 seats');
     }
 
-    if (!webinaire.hasNoSeats()) {
+    if (webinaire.hasNoSeats()) {
       throw new Error('The webinaire must have at least 1 seat');
     }
 
