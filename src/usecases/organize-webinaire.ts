@@ -14,7 +14,7 @@ export class OrganizeWebinaire {
     seats: number;
     startDate: Date;
     endDate: Date;
-  }) {
+  }): Promise<{ id: string }> {
     const id = this.idGenerator.generate();
     const webinaire = new Webinaire({
       id,
@@ -39,6 +39,6 @@ export class OrganizeWebinaire {
 
     await this.repository.create(webinaire);
 
-    return id;
+    return { id };
   }
 }
