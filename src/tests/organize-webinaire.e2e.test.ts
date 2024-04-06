@@ -1,54 +1,32 @@
-import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
 import { addDays } from 'date-fns';
+import { e2eUsers } from './seeds/user-seeds';
+import { TestApp } from './utils/test-app';
+import { AbstractWebinarRepository } from '../webinars/ports/abstract-webinar-repository';
 
-import { AppModule } from '../app/app.module';
-import { User } from '../entities';
-import {
-  InMemoryUserRepository,
-  InMemoryWebinaireRepository,
-} from '../adapters';
-import { INestApplication } from '@nestjs/common';
-
-describe('Feature: organizing a webinaire', () => {
-  let app: INestApplication;
-
-  const johnDoe = new User({
-    id: 'john-doe',
-    email: 'johndoe@gmail.com',
-    password: 'azerty',
-  });
-
-  const token = Buffer.from(
-    `${johnDoe.props.email}:${johnDoe.props.password}`,
-  ).toString('base64');
+describe('Feature: organizing a webinar', () => {
+  let app: TestApp;
 
   beforeEach(async () => {
-    const module = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = module.createNestApplication();
-    await app.init();
-
-    const repository = app.get(InMemoryUserRepository);
-    await repository.create(johnDoe);
+    app = new TestApp();
+    await app.setup();
+    await app.loadFixtures([e2eUsers.johnDoe]);
   });
 
   afterEach(async () => {
-    await app.close();
-  })
+    await app.cleanup();
+  });
 
   describe('Scenario: Happy path', () => {
-    it('should create the webinaire', async () => {
+    it('should create the webinar', async () => {
       const startDate = addDays(new Date(), 4);
       const endDate = addDays(new Date(), 5);
 
       const result = await request(app.getHttpServer())
-        .post('/webinaires')
-        .set('Authorization', `Basic ${token}`)
+        .post('/webinars')
+        .set('Authorization', e2eUsers.johnDoe.createAuthorizationToken())
         .send({
-          title: 'My first webinaire',
+          title: 'My first webinar',
           seats: 100,
           startDate: startDate.toISOString(),
           endDate: endDate.toISOString(),
@@ -57,14 +35,16 @@ describe('Feature: organizing a webinaire', () => {
       expect(result.status).toBe(201);
       expect(result.body).toEqual({ id: expect.any(String) });
 
-      const webinaireRepository = app.get(InMemoryWebinaireRepository);
-      const webinaire = webinaireRepository.database[0];
+      const webinarRepository = app.get<AbstractWebinarRepository>(
+        AbstractWebinarRepository,
+      );
+      const webinar = await webinarRepository.findById(result.body.id);
 
-      expect(webinaire).toBeDefined();
-      expect(webinaire.props).toEqual({
+      expect(webinar).toBeDefined();
+      expect(webinar!.props).toEqual({
         id: result.body.id,
         organizerId: 'john-doe',
-        title: 'My first webinaire',
+        title: 'My first webinar',
         seats: 100,
         startDate: startDate,
         endDate: endDate,
@@ -75,9 +55,9 @@ describe('Feature: organizing a webinaire', () => {
   describe('Scenario: user is not authenticated', () => {
     it('should reject', async () => {
       await request(app.getHttpServer())
-        .post('/webinaires')
+        .post('/webinars')
         .send({
-          title: 'My first webinaire',
+          title: 'My first webinar',
           seats: 100,
           startDate: addDays(new Date(), 4).toISOString(),
           endDate: addDays(new Date(), 5).toISOString(),
