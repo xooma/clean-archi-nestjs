@@ -1,5 +1,5 @@
-import { AbstractUserRepository } from '../../users/ports/abstract-user-repository';
-import { User } from '../../users/entities/user.entity';
+import { AbstractUserRepository } from '../../user/ports/abstract-user-repository';
+import { User } from '../../user/entities/user.entity';
 
 export interface IAuthenticator {
   authenticate(token: string): Promise<User>;

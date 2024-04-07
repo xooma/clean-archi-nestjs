@@ -5,13 +5,14 @@ import { CoreService } from './core.service';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
 import { Authenticator } from './services/authenticator';
-import { AbstractUserRepository } from '../users/ports/abstract-user-repository';
-import { WebinarsModule } from '../webinars/webinars.module';
-import { UsersModule } from '../users/users.module';
 import { CommonModule } from './common.module';
+import { AbstractUserRepository } from '../user/ports/abstract-user-repository';
+import { WebinarsModule } from '../webinar/webinars.module';
+import { UsersModule } from '../user/users.module';
+import { ParticipationModule } from '../participation/participation.module';
 
 @Module({
-  imports: [CommonModule, WebinarsModule, UsersModule],
+  imports: [CommonModule, WebinarsModule, UsersModule, ParticipationModule],
   controllers: [CoreController],
   providers: [
     CoreService,
