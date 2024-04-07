@@ -2,7 +2,7 @@ import * as request from 'supertest';
 import { addDays } from 'date-fns';
 import { TestApp } from './utils/test-app';
 import { AbstractWebinarRepository } from '../webinars/ports/abstract-webinar-repository';
-import { e2eUsers } from './seeds/user.seeds';
+import { e2eUsers } from './seeds/user.seeds.e2e';
 
 describe('Feature: organizing a webinar', () => {
   let app: TestApp;

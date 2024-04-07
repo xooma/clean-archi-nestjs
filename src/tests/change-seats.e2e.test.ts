@@ -1,8 +1,8 @@
 import * as request from 'supertest';
 import { TestApp } from './utils/test-app';
 import { AbstractWebinarRepository } from '../webinars/ports/abstract-webinar-repository';
-import { e2eUsers } from './seeds/user.seeds';
-import { e2eWebinars } from './seeds/webinar.seeds';
+import { e2eWebinars } from './seeds/webinar.seeds.e2e';
+import { e2eUsers } from './seeds/user.seeds.e2e';
 
 describe('Feature: changing the number of seats', () => {
   let app: TestApp;

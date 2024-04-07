@@ -1,4 +1,5 @@
 import { differenceInDays } from 'date-fns';
+import { Entity } from '../../shared/entity';
 
 type WebinarProps = {
   id: string;
@@ -9,17 +10,7 @@ type WebinarProps = {
   endDate: Date;
 };
 
-export class Webinar {
-  public initialState: WebinarProps;
-  public props: WebinarProps;
-
-  constructor(props: WebinarProps) {
-    this.initialState = { ...props };
-    this.props = { ...props };
-
-    Object.freeze(this.initialState);
-  }
-
+export class Webinar extends Entity<WebinarProps> {
   isTooClose(now: Date): boolean {
     const diff = differenceInDays(this.props.startDate, now);
 
@@ -32,13 +23,5 @@ export class Webinar {
 
   hasNoSeats() {
     return this.props.seats < 1
-  }
-
-  update(webinar: Partial<WebinarProps>): void {
-    this.props = { ...this.props, ...webinar };
-  }
-
-  commit(): void {
-    this.initialState = { ...this.props };
   }
 }
