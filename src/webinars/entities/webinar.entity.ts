@@ -10,7 +10,15 @@ type WebinarProps = {
 };
 
 export class Webinar {
-  constructor(public props: WebinarProps) {}
+  public initialState: WebinarProps;
+  public props: WebinarProps;
+
+  constructor(props: WebinarProps) {
+    this.initialState = { ...props };
+    this.props = { ...props };
+
+    Object.freeze(this.initialState);
+  }
 
   isTooClose(now: Date): boolean {
     const diff = differenceInDays(this.props.startDate, now);
@@ -28,5 +36,9 @@ export class Webinar {
 
   update(webinar: Partial<WebinarProps>): void {
     this.props = { ...this.props, ...webinar };
+  }
+
+  commit(): void {
+    this.initialState = { ...this.props };
   }
 }

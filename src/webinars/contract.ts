@@ -9,8 +9,17 @@ export namespace WebinarApi {
       endDate: z.coerce.date(),
     });
 
-    export type Request = z.infer<typeof WebinarApi.Webinar.schema>;
+    export type Request = z.infer<typeof schema>;
 
     export type Response = { id: string };
+  }
+
+  export namespace ChangeSeats {
+    export const schema = z.object({
+      seats: z.number()
+    });
+
+    export type Request = z.infer<typeof schema>;
+    export type Response = void;
   }
 }

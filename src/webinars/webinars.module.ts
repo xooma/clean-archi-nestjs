@@ -5,6 +5,7 @@ import { InMemoryWebinarRepository } from './adapters/in-memory-webinar-reposito
 import { AbstractDateGenerator, AbstractIDGenerator } from '../core/ports';
 import { OrganizeWebinar } from './usecases';
 import { CommonModule } from '../core/common.module';
+import { ChangeSeats } from './usecases/change-seats';
 
 @Module({
   imports: [CommonModule],
@@ -24,6 +25,11 @@ import { CommonModule } from '../core/common.module';
       useFactory: (webinarRepository, idGenerator, dateGenerator) =>
         new OrganizeWebinar(webinarRepository, idGenerator, dateGenerator),
     },
+    {
+      provide: ChangeSeats,
+      inject: [AbstractWebinarRepository],
+      useFactory: (webinarRepository) => new ChangeSeats(webinarRepository),
+    }
   ],
   exports: [AbstractWebinarRepository],
 })
