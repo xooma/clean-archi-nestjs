@@ -19,7 +19,7 @@ describe('Feature: canceling a webinar', () => {
 
   describe('Scenario: Happy path', () => {
     it('should succeed', async () => {
-      const id = 'id-1';
+      const id = e2eWebinars.johnDoe.entity.props.id;
 
       const result = await request(app.getHttpServer())
         .delete(`/webinars/${id}/cancel`)
@@ -37,7 +37,7 @@ describe('Feature: canceling a webinar', () => {
 
   describe('Scenario: user is not authenticated', () => {
     it('should reject', async () => {
-      const id = 'id-1';
+      const id = e2eWebinars.johnDoe.entity.props.id;
 
       await request(app.getHttpServer()).delete(`/webinars/${id}/cancel`).send().expect(403);
     });

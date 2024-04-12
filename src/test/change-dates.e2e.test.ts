@@ -5,6 +5,7 @@ import { WebinarFixture } from './fixtures/webinar.fixture';
 import { addDays } from 'date-fns';
 import { AbstractWebinarRepository } from '../webinar/ports/abstract-webinar-repository';
 import { Webinar } from '../webinar/entities/webinar.entity';
+import { e2eWebinars } from './seeds/webinar.seeds.e2e';
 
 describe('Feature: changing the dates', () => {
   let app: TestApp;
@@ -12,14 +13,7 @@ describe('Feature: changing the dates', () => {
   beforeEach(async () => {
     app = new TestApp();
     await app.setup();
-    await app.loadFixtures([e2eUsers.johnDoe, new WebinarFixture(new Webinar({
-      id: 'id-1',
-      organizerId: 'john-doe',
-      seats: 50,
-      title: 'My first webinar',
-      startDate: addDays(new Date(), 4),
-      endDate: addDays(new Date(), 5),
-    }))]);
+    await app.loadFixtures([e2eUsers.johnDoe, e2eWebinars.johnDoe]);
   });
 
   afterEach(async () => {
@@ -30,7 +24,7 @@ describe('Feature: changing the dates', () => {
     it('should succeed', async () => {
       const startDate = addDays(new Date(), 5);
       const endDate = addDays(new Date(), 5);
-      const id = 'id-1';
+      const id = e2eWebinars.johnDoe.entity.props.id;
 
       const result = await request(app.getHttpServer())
         .post(`/webinars/${id}/dates`)
@@ -53,7 +47,8 @@ describe('Feature: changing the dates', () => {
   describe('Scenario: user is not authenticated', () => {
     it('should reject', async () => {
       const startDate = addDays(new Date(), 5);
-      const endDate = addDays(new Date(), 5);      const id = 'id-1';
+      const endDate = addDays(new Date(), 5);
+      const id = e2eWebinars.johnDoe.entity.props.id;
 
       await request(app.getHttpServer())
         .post(`/webinars/${id}/seats`)

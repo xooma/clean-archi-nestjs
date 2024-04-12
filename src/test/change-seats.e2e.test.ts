@@ -20,7 +20,7 @@ describe('Feature: changing the number of seats', () => {
   describe('Scenario: Happy path', () => {
     it('should succeed', async () => {
       const seats = 100;
-      const id = 'id-1';
+      const id = e2eWebinars.johnDoe.entity.props.id;
 
       const result = await request(app.getHttpServer())
         .post(`/webinars/${id}/seats`)
@@ -42,7 +42,7 @@ describe('Feature: changing the number of seats', () => {
   describe('Scenario: user is not authenticated', () => {
     it('should reject', async () => {
       const seats = 100;
-      const id = 'id-1';
+      const id = e2eWebinars.johnDoe.entity.props.id;
 
       await request(app.getHttpServer())
         .post(`/webinars/${id}/seats`)

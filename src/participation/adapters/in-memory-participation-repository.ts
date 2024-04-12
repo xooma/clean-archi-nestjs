@@ -1,5 +1,8 @@
 import { AbstractParticipationRepository } from '../ports/abstract-participation-repository';
 import { Participation } from '../entities/participation.entity';
+import { id } from 'date-fns/locale';
+import { count } from 'rxjs';
+import { undefined } from 'zod';
 
 export class InMemoryParticipationRepository implements AbstractParticipationRepository {
   constructor(public readonly database: Participation[] = []) {}
@@ -26,7 +29,7 @@ export class InMemoryParticipationRepository implements AbstractParticipationRep
     this.database.push(participation);
   }
 
-  async update(participation: Participation): Promise<void> {
-    return;
+  async delete(participation: Participation): Promise<void> {
+    this.database.splice(this.database.indexOf(participation), 1);
   }
 }

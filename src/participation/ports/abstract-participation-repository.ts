@@ -5,5 +5,5 @@ export abstract class AbstractParticipationRepository {
   abstract findByWebinarId(webinarId: string): Promise<Participation[] | null>;
   abstract countParticipations(webinarId: string): Promise<number>;
   abstract create(participation: Participation): Promise<void>;
-  abstract update(participation: Participation): Promise<void>;
+  abstract delete(participation: Participation): Promise<void>;
 }

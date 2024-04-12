@@ -4,6 +4,7 @@ import { CancelWebinar, ChangeDates, ChangeSeats, OrganizeWebinar } from '../use
 import { WebinarApi } from '../contract';
 import { User } from '../../user/entities/user.entity';
 import { ReserveSeat } from '../usecases/reserve-seat';
+import { CancelSeat } from '../usecases/cancel-seat';
 
 @Controller('webinars')
 export class WebinarController {
@@ -13,6 +14,7 @@ export class WebinarController {
     private changeDates: ChangeDates,
     private cancelWebinar: CancelWebinar,
     private reserveSeat: ReserveSeat,
+    private cancelSeat: CancelSeat,
   ) {}
 
   @Post()
@@ -73,5 +75,11 @@ export class WebinarController {
   @Post(':id/participations')
   async handleReserveSeat(@Param('id') id: string, @Request() request: { user: User }): Promise<WebinarApi.ReserveSeat.Response> {
     return this.reserveSeat.execute({ user: request.user, webinarId: id });
+  }
+
+  @HttpCode(204)
+  @Delete(':id/participations')
+  async handleCancelSeat(@Param('id') id: string, @Request() request: { user: User }): Promise<WebinarApi.CancelSeat.Response> {
+    return this.cancelSeat.execute({ user: request.user, webinarId: id });
   }
 }

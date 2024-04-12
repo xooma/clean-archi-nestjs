@@ -43,7 +43,7 @@ describe('Feature: organizing a webinar', () => {
       expect(webinar).toBeDefined();
       expect(webinar!.props).toEqual({
         id: result.body.id,
-        organizerId: 'john-doe',
+        organizerId: e2eUsers.johnDoe.entity.props.id,
         title: 'My first webinar',
         seats: 100,
         startDate: startDate,
