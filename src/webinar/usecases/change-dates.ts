@@ -49,7 +49,7 @@ export class ChangeDates implements IExecutable<Request, Response> {
   }
 
   private async sendEmails(webinar: Webinar): Promise<void> {
-    const participations = await this.participationRepository.findById(
+    const participations = await this.participationRepository.findByWebinarId(
       webinar.props.id,
     );
 

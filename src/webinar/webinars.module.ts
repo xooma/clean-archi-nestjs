@@ -10,6 +10,7 @@ import { AbstractMailer } from '../core/ports/abstract-mailer';
 import { AbstractParticipationRepository } from '../participation/ports/abstract-participation-repository';
 import { ParticipationModule } from '../participation/participation.module';
 import { UsersModule } from '../user/users.module';
+import { ReserveSeat } from './usecases/reserve-seat';
 
 @Module({
   imports: [CommonModule, UsersModule, ParticipationModule],
@@ -47,6 +48,12 @@ import { UsersModule } from '../user/users.module';
       inject: [AbstractWebinarRepository, AbstractParticipationRepository, AbstractUserRepository, AbstractMailer],
       useFactory: (webinarRepository, participationRepository, userRepository, mailer) =>
         new CancelWebinar(webinarRepository, participationRepository, userRepository, mailer),
+    },
+    {
+      provide: ReserveSeat,
+      inject: [AbstractParticipationRepository, AbstractWebinarRepository, AbstractUserRepository, AbstractMailer],
+      useFactory: (participationRepository, webinarRepository, userRepository, mailer) =>
+        new ReserveSeat(participationRepository, webinarRepository, userRepository, mailer),
     },
   ],
   exports: [AbstractWebinarRepository],

@@ -45,7 +45,7 @@ describe('Feature: cancel a webinar', () => {
     participationRepository = new InMemoryParticipationRepository([bobParticipation]);
     userRepository = new InMemoryUserRepository([testUsers.aliceFoo, testUsers.billyBob]);
     mailer = new InMemoryMailer();
-    useCase = new CancelWebinar(webinarRepository,participationRepository, userRepository, mailer);
+    useCase = new CancelWebinar(webinarRepository, participationRepository, userRepository, mailer);
   });
 
   describe('Scenario: happy path', () => {

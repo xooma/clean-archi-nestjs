@@ -1,7 +1,9 @@
 import { Participation } from '../entities/participation.entity';
 
 export abstract class AbstractParticipationRepository {
-  abstract findById(id: string): Promise<Participation[] | null>;
+  abstract findOne(userId: string, webinarId: string): Promise<Participation | null>;
+  abstract findByWebinarId(webinarId: string): Promise<Participation[] | null>;
+  abstract countParticipations(webinarId: string): Promise<number>;
   abstract create(participation: Participation): Promise<void>;
   abstract update(participation: Participation): Promise<void>;
 }

@@ -36,7 +36,7 @@ export class CancelWebinar implements IExecutable<Request, Response> {
   }
 
   private async sendEmails(webinar: Webinar): Promise<void> {
-    const participations = await this.participationRepository.findById(webinar.props.id);
+    const participations = await this.participationRepository.findByWebinarId(webinar.props.id);
 
     const users = await Promise.all(
       participations!

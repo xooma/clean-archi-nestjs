@@ -8,5 +8,12 @@ export const e2eUsers = {
       email: 'johndoe@gmail.com',
       password: 'azerty',
     })
+  ),
+  charlesLeclerc: new UserFixture(
+    new User({
+      id: 'charles-leclerc',
+      email: 'charlesleclerc@gmail.com',
+      password: 'azerty',
+    })
   )
 }
