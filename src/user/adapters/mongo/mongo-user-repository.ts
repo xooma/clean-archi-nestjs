@@ -1,33 +1,20 @@
+import { Model } from 'mongoose';
+
 import { AbstractUserRepository } from '../../ports/abstract-user-repository';
 import { User } from '../../entities/user.entity';
-import { Model, Promise } from 'mongoose';
+
 import { MongoUser } from './mongo-user';
+import { UserMapper } from './user.mapper';
 
 export class MongoUserRepository implements AbstractUserRepository {
+  private mapper = new UserMapper();
+
   constructor(private readonly model: Model<MongoUser.SchemaClass>) {}
 
   async create(user: User): Promise<void> {
-    const record = new this.model({
-      _id: user.props.id,
-      emailAdress: user.props.emailAdress,
-      password: user.props.password,
-    });
+    const record = new this.model(this.mapper.toPersistence(user));
 
     await record.save();
-  }
-
-  async findByEmailAdress(email: string): Promise<User | null> {
-    const user = await this.model.findOne({ emailAdress: email });
-
-    if (!user) {
-      return null;
-    }
-
-    return new User({
-      id: user._id,
-      emailAdress: user.emailAdress,
-      password: user.password,
-    });
   }
 
   async findById(userId: string): Promise<User | null> {
@@ -37,10 +24,16 @@ export class MongoUserRepository implements AbstractUserRepository {
       return null;
     }
 
-    return new User({
-      id: user._id,
-      emailAdress: user.emailAdress,
-      password: user.password,
-    });
+    return this.mapper.toDomain(user);
+  }
+
+  async findByEmailAdress(email: string): Promise<User | null> {
+    const user = await this.model.findOne({ emailAdress: email });
+
+    if (!user) {
+      return null;
+    }
+
+    return this.mapper.toDomain(user);
   }
 }
