@@ -8,6 +8,7 @@ import { CoreModule } from '../../core/core.module';
 import { MongoUser } from '../../user/adapters/mongo/mongo-user';
 import { IFixture } from './fixture.interface';
 import { MongoWebinar } from '../../webinar/adapters/mongo/mongo-webinar';
+import { MongoParticipation } from '../../participation/adapters/mongo/mongo-participation';
 
 export class TestApp {
   private app: INestApplication;
@@ -42,6 +43,10 @@ export class TestApp {
 
     await this.app.get<Model<MongoWebinar.SchemaClass>>(
       getModelToken(MongoWebinar.CollectionName)
+    ).deleteMany({});
+
+    await this.app.get<Model<MongoParticipation.SchemaClass>>(
+      getModelToken(MongoParticipation.CollectionName)
     ).deleteMany({});
   }
 
