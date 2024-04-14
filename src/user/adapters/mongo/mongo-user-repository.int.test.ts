@@ -10,7 +10,6 @@ import { MongoUserRepository } from './mongo-user-repository';
 
 describe('MongoUserRepository', () => {
   async function createUserInDatabase(user: User) {
-    const model = app.get<Model<MongoUser.Document>>(getModelToken(MongoUser.CollectionName));
     const record = new model({
       _id: user.props.id,
       emailAdress: user.props.emailAdress,

@@ -16,4 +16,8 @@ export abstract class Entity<T> {
   commit(): void {
     this.initialProps = { ...this.props };
   }
+
+  clone(): Entity<T> {
+    return new (this.constructor as any)(this.props);
+  }
 }

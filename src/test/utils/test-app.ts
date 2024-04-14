@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { CoreModule } from '../../core/core.module';
 import { MongoUser } from '../../user/adapters/mongo/mongo-user';
 import { IFixture } from './fixture.interface';
+import { MongoWebinar } from '../../webinar/adapters/mongo/mongo-webinar';
 
 export class TestApp {
   private app: INestApplication;
@@ -37,6 +38,10 @@ export class TestApp {
   private async clearDatabase() {
     await this.app.get<Model<MongoUser.SchemaClass>>(
       getModelToken(MongoUser.CollectionName)
+    ).deleteMany({});
+
+    await this.app.get<Model<MongoWebinar.SchemaClass>>(
+      getModelToken(MongoWebinar.CollectionName)
     ).deleteMany({});
   }
 
