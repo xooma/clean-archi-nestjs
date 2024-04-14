@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { WebinarDTO } from './dtos/webinar.dto';
 
 export namespace WebinarApi {
   export namespace Webinar {
@@ -43,5 +44,14 @@ export namespace WebinarApi {
 
   export namespace CancelSeat {
     export type Response = void;
+  }
+
+  export namespace GetWebinarById {
+    export const schema = z.object({
+      id: z.string(),
+    });
+
+    export type Request = z.infer<typeof schema>;
+    export type Response = WebinarDTO;
   }
 }

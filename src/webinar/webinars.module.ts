@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { WebinarController } from './controllers/webinars.controller';
 import { AbstractWebinarRepository } from './ports/abstract-webinar-repository';
-import { InMemoryWebinarRepository } from './adapters/in-memory-webinar-repository';
 import { AbstractDateGenerator, AbstractIDGenerator } from '../core/ports';
 import { CancelWebinar, ChangeDates, ChangeSeats, OrganizeWebinar } from './usecases';
 import { CommonModule } from '../core/common.module';
@@ -15,6 +14,10 @@ import { CancelSeat } from './usecases/cancel-seat';
 import { getModelToken, MongooseModule } from '@nestjs/mongoose';
 import { MongoWebinar } from './adapters/mongo/mongo-webinar';
 import { MongoWebinarRepository } from './adapters/mongo/mongo-webinar-repository';
+import { AbstractGetWebinarByIdQuery } from './ports/abstract-get-webinar-by-id.query';
+import { MongoParticipation } from '../participation/adapters/mongo/mongo-participation';
+import { MongoUser } from '../user/adapters/mongo/mongo-user';
+import { MongoGetWebinarByIdQuery } from './adapters/mongo/mongo-get-webinar-by-id.query';
 
 @Module({
   imports: [
@@ -29,10 +32,6 @@ import { MongoWebinarRepository } from './adapters/mongo/mongo-webinar-repositor
       provide: AbstractWebinarRepository,
       inject: [getModelToken(MongoWebinar.CollectionName)],
       useFactory: (model) => new MongoWebinarRepository(model),
-    },
-    {
-      provide: AbstractWebinarRepository,
-      useClass: InMemoryWebinarRepository,
     },
     {
       provide: OrganizeWebinar,
@@ -74,6 +73,16 @@ import { MongoWebinarRepository } from './adapters/mongo/mongo-webinar-repositor
       inject: [AbstractParticipationRepository, AbstractWebinarRepository, AbstractUserRepository, AbstractMailer],
       useFactory: (participationRepository, webinarRepository, userRepository, mailer) =>
         new CancelSeat(participationRepository, webinarRepository, userRepository, mailer),
+    },
+    {
+      provide: AbstractGetWebinarByIdQuery,
+      inject: [
+        getModelToken(MongoWebinar.CollectionName),
+        getModelToken(MongoParticipation.CollectionName),
+        getModelToken(MongoUser.CollectionName),
+      ],
+      useFactory: (webinarModel, participationModel, userModel) =>
+        new MongoGetWebinarByIdQuery(webinarModel, participationModel, userModel),
     },
   ],
   exports: [AbstractWebinarRepository],

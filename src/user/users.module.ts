@@ -13,6 +13,6 @@ import { MongoUserRepository } from './adapters/mongo/mongo-user-repository';
       useFactory: (model) => new MongoUserRepository(model),
     },
   ],
-  exports: [AbstractUserRepository],
+  exports: [MongooseModule, AbstractUserRepository],
 })
 export class UsersModule {}

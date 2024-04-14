@@ -14,6 +14,6 @@ import { MongoParticipation } from './adapters/mongo/mongo-participation';
       useClass: InMemoryParticipationRepository,
     },
   ],
-  exports: [AbstractParticipationRepository],
+  exports: [MongooseModule, AbstractParticipationRepository],
 })
 export class ParticipationModule {}

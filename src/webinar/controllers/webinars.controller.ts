@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, HttpCode, Param, Post, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Request } from '@nestjs/common';
 import { ZodValidationPipe } from '../../core/pipes';
 import { CancelWebinar, ChangeDates, ChangeSeats, OrganizeWebinar } from '../usecases';
 import { WebinarApi } from '../contract';
 import { User } from '../../user/entities/user.entity';
 import { ReserveSeat } from '../usecases/reserve-seat';
 import { CancelSeat } from '../usecases/cancel-seat';
+import { AbstractGetWebinarByIdQuery } from '../ports/abstract-get-webinar-by-id.query';
 
 @Controller('webinars')
 export class WebinarController {
@@ -15,7 +16,13 @@ export class WebinarController {
     private cancelWebinar: CancelWebinar,
     private reserveSeat: ReserveSeat,
     private cancelSeat: CancelSeat,
+    private getWebinarById: AbstractGetWebinarByIdQuery,
   ) {}
+
+  @Get(':id')
+  async handleGetWebinarById(@Param('id') id: string): Promise<WebinarApi.GetWebinarById.Response> {
+    return this.getWebinarById.execute(id);
+  }
 
   @Post()
   async handleOrganizeWebinar(
@@ -52,7 +59,7 @@ export class WebinarController {
   async handleChangeDates(
     @Param('id') id: string,
     @Body(new ZodValidationPipe(WebinarApi.ChangeDates.schema))
-      body: WebinarApi.ChangeDates.Request,
+    body: WebinarApi.ChangeDates.Request,
     @Request() request: { user: User },
   ): Promise<WebinarApi.ChangeDates.Response> {
     return this.changeDates.execute({
@@ -65,7 +72,10 @@ export class WebinarController {
 
   @HttpCode(200)
   @Delete(':id/cancel')
-  async handleCancelWebinar(@Param('id') id: string, @Request() request: { user: User }): Promise<WebinarApi.Cancel.Response> {
+  async handleCancelWebinar(
+    @Param('id') id: string,
+    @Request() request: { user: User },
+  ): Promise<WebinarApi.Cancel.Response> {
     return this.cancelWebinar.execute({
       user: request.user,
       webinarId: id,
@@ -73,13 +83,19 @@ export class WebinarController {
   }
 
   @Post(':id/participations')
-  async handleReserveSeat(@Param('id') id: string, @Request() request: { user: User }): Promise<WebinarApi.ReserveSeat.Response> {
+  async handleReserveSeat(
+    @Param('id') id: string,
+    @Request() request: { user: User },
+  ): Promise<WebinarApi.ReserveSeat.Response> {
     return this.reserveSeat.execute({ user: request.user, webinarId: id });
   }
 
   @HttpCode(204)
   @Delete(':id/participations')
-  async handleCancelSeat(@Param('id') id: string, @Request() request: { user: User }): Promise<WebinarApi.CancelSeat.Response> {
+  async handleCancelSeat(
+    @Param('id') id: string,
+    @Request() request: { user: User },
+  ): Promise<WebinarApi.CancelSeat.Response> {
     return this.cancelSeat.execute({ user: request.user, webinarId: id });
   }
 }
