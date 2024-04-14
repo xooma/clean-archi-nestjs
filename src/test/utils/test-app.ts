@@ -2,13 +2,23 @@ import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { IFixture } from './fixture.interface';
 import { CoreModule } from '../../core/core.module';
+import { ConfigModule } from '@nestjs/config';
 
 export class TestApp {
   private app: INestApplication;
 
   async setup() {
     const module = await Test.createTestingModule({
-      imports: [CoreModule],
+      imports: [CoreModule, ConfigModule.forRoot({
+        ignoreEnvFile: true,
+        ignoreEnvVars: true,
+        isGlobal: true,
+        load: [
+          () => ({
+            DATABASE_URL: 'mongodb://admin:azerty@localhost:3701/webinars?authSource=admin',
+          })
+        ],
+      })],
     }).compile();
 
     this.app = module.createNestApplication();
