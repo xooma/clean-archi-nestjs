@@ -2,7 +2,7 @@ import { Entity } from '../../shared/entity';
 
 type UserProps = {
   id: string;
-  email: string;
+  emailAdress: string;
   password: string;
 };
 

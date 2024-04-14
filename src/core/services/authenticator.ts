@@ -12,7 +12,7 @@ export class Authenticator implements IAuthenticator {
     const decoded = Buffer.from(token, 'base64').toString('utf-8');
     const [email, password] = decoded.split(':');
 
-    const user = await this.userRepository.findByEmail(email);
+    const user = await this.userRepository.findByEmailAdress(email);
 
     if (!user) throw new Error('User not found');
 

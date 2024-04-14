@@ -75,7 +75,7 @@ describe('Feature: reserving a seat', () => {
       await useCase.execute(payload);
 
       expect(mailer.sentEmails[0]).toEqual({
-        to: testUsers.aliceFoo.props.email,
+        to: testUsers.aliceFoo.props.emailAdress,
         subject: 'New seat reserved',
         body: `A new seat has been reserved for the webinar "${webinar.props.title}".`,
       });
@@ -85,7 +85,7 @@ describe('Feature: reserving a seat', () => {
       await useCase.execute(payload);
 
       expect(mailer.sentEmails[1]).toEqual({
-        to: testUsers.billyBob.props.email,
+        to: testUsers.billyBob.props.emailAdress,
         subject: 'Reservation confirmed',
         body: `You have successfully reserved a seat for the webinar "${webinar.props.title}".`,
       });

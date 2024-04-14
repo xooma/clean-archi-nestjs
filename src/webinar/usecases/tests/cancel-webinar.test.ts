@@ -63,7 +63,7 @@ describe('Feature: cancel a webinar', () => {
       await useCase.execute(payload);
 
       expect(mailer.sentEmails).toEqual([{
-        to: testUsers.billyBob.props.email,
+        to: testUsers.billyBob.props.emailAdress,
         subject: 'Webinar canceled',
         body: `The webinar "${webinar.props.title}" has been canceled.`,
       }])

@@ -12,7 +12,7 @@ describe('Authenticator', () => {
     await repository.create(
       new User({
         id: 'id-1',
-        email: 'johndoe@gmail.com',
+        emailAdress: 'johndoe@gmail.com',
         password: 'azerty',
       }),
     );

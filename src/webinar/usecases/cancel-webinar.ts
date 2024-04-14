@@ -49,7 +49,7 @@ export class CancelWebinar implements IExecutable<Request, Response> {
     await Promise.all(
       users.map(async (user: User) => {
         await this.mailer.send({
-          to: user.props.email,
+          to: user.props.emailAdress,
           subject: 'Webinar canceled',
           body: `The webinar "${webinar.props.title}" has been canceled.`,
         });

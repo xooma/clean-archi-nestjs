@@ -41,7 +41,7 @@ export class CancelSeat implements IExecutable<Request, Response> {
     const organizer = await this.userRepository.findById(webinar.props.organizerId);
 
     await this.mailer.send({
-      to: organizer!.props.email,
+      to: organizer!.props.emailAdress,
       subject: 'A participant has canceled their reservation',
       body: `A participant has canceled their reservation for the webinar "${webinar.props.title}".`,
     });
@@ -49,7 +49,7 @@ export class CancelSeat implements IExecutable<Request, Response> {
 
   private async sendEmailToParticipant(webinar: Webinar, user: User): Promise<void> {
     await this.mailer.send({
-      to: user.props.email,
+      to: user.props.emailAdress,
       subject: 'Reservation canceled',
       body: `You have successfully canceled your reservation for the webinar "${webinar.props.title}".`,
     });

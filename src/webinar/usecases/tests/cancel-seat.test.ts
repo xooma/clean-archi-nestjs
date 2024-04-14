@@ -56,7 +56,7 @@ describe('Feature: canceling a seat', () => {
       await useCase.execute(payload);
 
       expect(mailer.sentEmails[0]).toEqual({
-        to: testUsers.aliceFoo.props.email,
+        to: testUsers.aliceFoo.props.emailAdress,
         subject: 'A participant has canceled their reservation',
         body: `A participant has canceled their reservation for the webinar "${webinar.props.title}".`,
       });
@@ -66,7 +66,7 @@ describe('Feature: canceling a seat', () => {
       await useCase.execute(payload);
 
       expect(mailer.sentEmails[1]).toEqual({
-        to: testUsers.charlesCat.props.email,
+        to: testUsers.charlesCat.props.emailAdress,
         subject: 'Reservation canceled',
         body: `You have successfully canceled your reservation for the webinar "${webinar.props.title}".`,
       });

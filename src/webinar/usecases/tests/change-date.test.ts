@@ -68,7 +68,7 @@ describe('Feature: changing the date of a webinar', () => {
       await useCase.execute(payload);
 
       expect(mailer.sentEmails).toEqual([{
-        to: testUsers.billyBob.props.email,
+        to: testUsers.billyBob.props.emailAdress,
         subject: `"${webinar.props.title}" changed dates`,
         body: `The date of the webinar "${webinar.props.title}" has been changed.`,
       }])

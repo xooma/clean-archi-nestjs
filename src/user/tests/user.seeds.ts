@@ -3,17 +3,17 @@ import { User } from '../entities/user.entity';
 export const testUsers = {
   aliceFoo: new User({
     id: 'alice-foo',
-    email: 'alicefoo@gmail.com',
+    emailAdress: 'alicefoo@gmail.com',
     password: 'azerty',
   }),
   billyBob: new User({
     id: 'billy-bob',
-    email: 'billybob@gmail.com',
+    emailAdress: 'billybob@gmail.com',
     password: 'azerty',
   }),
   charlesCat: new User({
     id: 'charles-cat',
-    email: 'charlescat@gmail.com',
+    emailAdress: 'charlescat@gmail.com',
     password: 'caterty'
   })
 };

@@ -8,8 +8,8 @@ export class InMemoryUserRepository implements AbstractUserRepository {
     this.database.push(user);
   }
 
-  async findByEmail(email: string): Promise<User | null> {
-    const user = this.database.find((user) => user.props.email === email);
+  async findByEmailAdress(email: string): Promise<User | null> {
+    const user = this.database.find((user) => user.props.emailAdress === email);
 
     return user ? new User(user.initialProps) : null;
   }

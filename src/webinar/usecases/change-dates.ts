@@ -64,7 +64,7 @@ export class ChangeDates implements IExecutable<Request, Response> {
     await Promise.all(
       users.map(async (user: User) => {
         await this.mailer.send({
-          to: user.props.email,
+          to: user.props.emailAdress,
           subject: `"${webinar.props.title}" changed dates`,
           body: `The date of the webinar "${webinar.props.title}" has been changed.`,
         });

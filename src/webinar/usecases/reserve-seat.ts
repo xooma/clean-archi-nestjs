@@ -57,7 +57,7 @@ export class ReserveSeat implements IExecutable<Request, Response> {
     const organizer = await this.userRepository.findById(webinar.props.organizerId);
 
     await this.mailer.send({
-      to: organizer!.props.email,
+      to: organizer!.props.emailAdress,
       subject: 'New seat reserved',
       body: `A new seat has been reserved for the webinar "${webinar.props.title}".`,
     });
@@ -65,7 +65,7 @@ export class ReserveSeat implements IExecutable<Request, Response> {
 
   private async sendEmailToParticipant(webinar: Webinar, user: User): Promise<void> {
     await this.mailer.send({
-      to: user.props.email,
+      to: user.props.emailAdress,
       subject: 'Reservation confirmed',
       body: `You have successfully reserved a seat for the webinar "${webinar.props.title}".`,
     });

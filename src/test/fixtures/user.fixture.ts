@@ -13,7 +13,7 @@ export class UserFixture implements IFixture {
 
   createAuthorizationToken(): string {
     return `Basic ${Buffer.from(
-      `${this.entity.props.email}:${this.entity.props.password}`,
+      `${this.entity.props.emailAdress}:${this.entity.props.password}`,
     ).toString('base64')}`;
   }
 }
